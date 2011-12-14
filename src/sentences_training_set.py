@@ -56,46 +56,51 @@ for k in range(len(source)):
 
 assert len(train_label) == len(train_set)
 
-valid_set = []
-valid_label = []
-test_set = []
-test_label = []
-for k in range(250):
-    idx = np.random.randint(0,len(train_set))
-    test_set.append(train_set.pop(idx))
-    test_label.append(train_label.pop(idx))
-    
-    idx = np.random.randint(0,len(train_set))
-    valid_set.append(train_set.pop(idx))
-    valid_label.append(train_label.pop(idx))
+#valid_set = []
+#valid_label = []
+#test_set = []
+#test_label = []
+#for k in range(250):
+#    idx = np.random.randint(0,len(train_set))
+#    test_set.append(train_set.pop(idx))
+#    test_label.append(train_label.pop(idx))
+#    
+#    idx = np.random.randint(0,len(train_set))
+#    valid_set.append(train_set.pop(idx))
+#    valid_label.append(train_label.pop(idx))
 
 train_set = np.vstack(train_set)
 tampon = []
 for l in train_label:
     tampon.extend(l)
 train_label = tampon
-    
-valid_set = np.vstack(valid_set)
-tampon = []
-for l in valid_label:
-    tampon.extend(l)
-valid_label = tampon
 
-test_set = np.vstack(test_set)
-tampon = []
-for l in test_label:
-    tampon.extend(l)
-test_label = tampon
-
-assert len(train_label) == train_set.shape[0]
-assert len(valid_label) == valid_set.shape[0]
-assert len(test_label) == test_set.shape[0]
+valid_set = train_set
+valid_label = train_label
+test_set = train_set
+test_label = train_label
+  
+#valid_set = np.vstack(valid_set)
+#tampon = []
+#for l in valid_label:
+#    tampon.extend(l)
+#valid_label = tampon
+#
+#test_set = np.vstack(test_set)
+#tampon = []
+#for l in test_label:
+#    tampon.extend(l)
+#test_label = tampon
+#
+#assert len(train_label) == train_set.shape[0]
+#assert len(valid_label) == valid_set.shape[0]
+#assert len(test_label) == test_set.shape[0]
 
 
 """ Save """
 print "... saving"
-f = open('../deep_training/model6', 'w')
-g = open('../deep_training/set6', 'w')
+f = open('../deep_training/sentencemodel6', 'w')
+g = open('../deep_training/sentenceset6', 'w')
 pickle.dump(reservoir.w_in, f, -1)
 pickle.dump(reservoir.w_bias, f, -1)
 pickle.dump(reservoir.w, f, -1)

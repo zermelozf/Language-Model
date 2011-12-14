@@ -17,7 +17,7 @@ for k in range(len(sentences)):
     sentences[k].insert(0,'.')
 
 in_d = len(vocabulary)
-out_d = 200
+out_d = 500
 w_reservoir = sparseReservoirMatrix((out_d,out_d), 0.27)
 
 reservoir = og.nodes.ReservoirNode(input_dim=in_d
@@ -73,20 +73,19 @@ for k in range(500):
 
 print ' '.join(text)
 
-#import pylab
-#max = 15
-#for k in range(max):
-#    if input == '.':
-#        reservoir.states = np.c_[initial_state].T
-#    input = flownode.execute(np.c_[lut[input]].T)
-#    input = input + 0.5
-#    input[np.nonzero(input<0)] = 0
-#    pylab.figure(k)
-#    pylab.title(' '.join(text[np.max(-6,-len(text)):]))
-#    pylab.xticks(range(len(vocabulary)),vocabulary, rotation=70, size='small')
-#    pylab.plot(input[0])
-#    input = vocabulary[draw(input[0],1)]
-#    text.append(input)
-#pylab.show()
+import pylab
+max = 15
+for k in range(max):
+    if input == '.':
+        reservoir.states = np.c_[initial_state].T
+    input = flownode.execute(np.c_[lut[input]].T)
+    input[np.nonzero(input<0)] = 0
+    pylab.figure(k)
+    pylab.title(' '.join(text[np.max(-6,-len(text)):]))
+    pylab.xticks(range(len(vocabulary)),vocabulary, rotation=70, size='small')
+    pylab.plot(input[0])
+    input = vocabulary[draw(input[0],1)]
+    text.append(input)
+pylab.show()
     
     
