@@ -45,47 +45,25 @@ for s in sentences:
         words.append(lut[s[k]])
         nwords.append(lut[s[k+1]])
     source.append(np.r_[words])
-    target.append(np.r_[nwords])
+    target.extend(np.r_[nwords])
 
 for b in source[:10]:
     reservoir.execute(b)
 initial_state = reservoir.states[-1]
 
+states = []
 for k in range(len(source)):
     reservoir.states = np.c_[initial_state].T
-    flownode.train(source[k], target[k])
-flownode.stop_training()
-    
-""" Produce a new text """
-print "Draw text..."
+    states.append(reservoir.execute(source[k]))
 
-input = '.'
-text = [input]
-for k in range(500):
-    if input == '.':
-        reservoir.states = np.c_[initial_state].T
-    input = flownode.execute(np.c_[lut[input]].T)
-    input = vocabulary[draw(input[0],1)]
-    text.append(input)
+X = np.vstack(states)
 
-#f = open('../languages/generated','w')
-#pickle.dump(text,f)  
+import mlpy
 
-print ' '.join(text)
+K = mlpy.kernel_gaussian(X.T, X.T, sigma=1)
 
-import pylab
-max = 15
-for k in range(max):
-    if input == '.':
-        reservoir.states = np.c_[initial_state].T
-    input = flownode.execute(np.c_[lut[input]].T)
-    input[np.nonzero(input<0)] = 0
-    pylab.figure(k)
-    pylab.title(' '.join(text[np.max(-6,-len(text)):]))
-    pylab.xticks(range(len(vocabulary)),vocabulary, rotation=70, size='small')
-    pylab.plot(input[0])
-    input = vocabulary[draw(input[0],1)]
-    text.append(input)
-pylab.show()
-    
-    
+readout = mlpy.KernelRidge(lmb=0.01)
+readout.learn(K, np.array(target)[:,0])
+
+kernel_distrib = readout.pred(X)
+

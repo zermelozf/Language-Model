@@ -20,7 +20,7 @@ for k in range(len(sentences)):
     sentences[k].insert(0,'.')
 
 in_d = len(vocabulary)
-out_d = 500
+out_d = 10
 w_reservoir = sparseReservoirMatrix((out_d,out_d), 0.27)
 
 reservoir = og.nodes.ReservoirNode(input_dim=in_d
@@ -97,10 +97,11 @@ test_label = train_label
 #assert len(test_label) == test_set.shape[0]
 
 
+
 """ Save """
 print "... saving"
-f = open('../deep_training/sentencemodel6', 'w')
-g = open('../deep_training/sentenceset6', 'w')
+f = open('../deep_training/reservoir10_sentencemodel6', 'w')
+g = open('../deep_training/reservoir10_sentenceset6', 'w')
 pickle.dump(reservoir.w_in, f, -1)
 pickle.dump(reservoir.w_bias, f, -1)
 pickle.dump(reservoir.w, f, -1)
@@ -116,10 +117,17 @@ print len(valid_label), "validation words."
 print len(test_label), "test words."
 
 
+############Source + Labels######################
 
-
-
-
+#train_set_x = np.vstack(source)
+#train_set_label = train_label
+#f = open('../deep_training/new_model_train6', 'w')
+#pickle.dump((train_set_x, train_set_label), f)
+#f.close()
+#
+#print train_set_x.shape, len(train_set_label)
+#print train_set_x[0], train_label[0]
+###################################
 
 #""" Testing """
 #print "... testing"

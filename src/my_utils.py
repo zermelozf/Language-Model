@@ -16,6 +16,12 @@ vocabulary = ['John','Mary','boy','girl','cat','dog','boys','girls','cats','dogs
 
 lut = dict([(vocabulary[i],  0.5*np.eye(len(vocabulary))[i]) for i in range(len(vocabulary))])
 
+def similarity(d1, d2):
+    normx = np.sqrt(np.sum(np.array(d1)**2, axis=1))
+    normy = np.sqrt(np.sum(np.array(d2)**2, axis=1))
+    prod = np.sum(np.array(d1)*np.array(d2),axis=1)
+    return prod/(normx*normy)
+
 def setVocLut():
     return vocabulary, lut
 

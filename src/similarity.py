@@ -54,7 +54,7 @@ import mdp
 from my_utils import sparseReservoirMatrix
 
 in_d = len(vocabulary)
-out_d = 200
+out_d = 100
 w_reservoir = sparseReservoirMatrix((out_d,out_d), 0.27)
 
 reservoir = og.nodes.ReservoirNode(input_dim=in_d
@@ -104,14 +104,17 @@ for s in sentences:
 assert len(esn_distrib)== len(pos)
 assert len(pos) == len(distrib)
 
-normx = np.sqrt(np.sum(np.array(distrib)**2, axis=1))
-normy = np.sqrt(np.sum(np.array(esn_distrib)**2, axis=1))
-prod = np.sum(np.array(distrib)*np.array(esn_distrib),axis=1)
-similarity = prod/(normx*normy)
-print "Similarity:", similarity[1000:1050]
-print "Mean similarity:", np.mean(similarity)
+def similarity(d1, d2):
+    normx = np.sqrt(np.sum(np.array(d1)**2, axis=1))
+    normy = np.sqrt(np.sum(np.array(d2)**2, axis=1))
+    prod = np.sum(np.array(d1)*np.array(d2),axis=1)
+    return prod/(normx*normy)
+    
+print "Similarity:", similarity(distrib, esn_distrib)[1000:1050]
+print "Mean similarity:", np.mean(similarity(distrib, esn_distrib))
 
-
+f = open('../models/similarity6', 'w')
+pickle.dump(distrib, f, -1)
 
 #""" Draw beautiful graphs """
 #import pylab
